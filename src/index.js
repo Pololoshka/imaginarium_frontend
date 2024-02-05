@@ -41,9 +41,9 @@ const theme = createTheme({
 root.render(
   // <ThemeProvider theme={theme}>
     <Router>
-      <React.StrictMode>
+      {/* <React.StrictMode> */}
         <App />
-      </React.StrictMode>
+      {/* </React.StrictMode> */}
     </Router>
   // </ThemeProvider>
 );

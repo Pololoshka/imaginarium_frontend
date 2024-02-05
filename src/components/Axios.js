@@ -1,24 +1,21 @@
-import axios from 'axios'
-import Cookies from 'js-cookie';
+import axios from "axios";
 
-const baseUrl = 'http://127.0.0.1:8000/'
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-const csrftoken = Cookies.get('csrftoken');
+const baseUrl = "http://127.0.0.1:8000/";
 
 const AxiosInstance = axios.create({
-    baseURL: baseUrl,
-    withCredentials: true,
-    withXSRFToken: true,
-    timeout: 5000,
-    headers: {
-        "Content-Type": "application/json",
-        accept: "application/json",
-        'X-CSRFToken': csrftoken,
-    },
+  baseURL: baseUrl,
+  timeout: 5000,
+  headers: {
+    "Content-Type": "application/json",
+    accept: "application/json",
+  },
+});
 
+AxiosInstance.interceptors.request.use((config) => {
+  config.headers.Authorization = `Token ${localStorage.getItem(
+    "imaginariumUserToken"
+  )}`;
+  return config;
+});
 
-})
-
-export default AxiosInstance
+export default AxiosInstance;

@@ -22,7 +22,10 @@ export default function NavBar(props) {
 
   return (
     <div>
-      <AppBar position="fixed" sx={{ bgcolor: "#CCC", color: "#000000", zIndex:"tooltip" }}>
+      <AppBar
+        position="fixed"
+        sx={{ bgcolor: "#CCC", color: "#000000", zIndex: "tooltip" }}
+      >
         <Toolbar disableGutters>
           <Box sx={{ mr: 2, ml: 5 }}>
             <IconButton size="large" color="inherit" href="/">
