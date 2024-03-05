@@ -1,14 +1,6 @@
 import * as React from "react";
 import { Typography } from "@mui/material";
 
-// const bull = (
-//   <Box
-//     component="span"
-//     sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-//   >
-//     •
-//   </Box>
-// );
 const Rules = (
   <React.Fragment>
     <Typography variant="h4" sx={{ m: 2 }} align="center">

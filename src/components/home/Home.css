@@ -1,8 +1,10 @@
 .Home{
     min-height: 100vh;
-    background-image: url("../img/background_image.jpg");
+    background-image: url("../../img/background_image.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: auto 100%;
     display: flex;
+    align-items: center;
+    /* flex-direction: column; */
   }

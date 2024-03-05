@@ -3,32 +3,32 @@ import "./Home.css";
 import Button from "@mui/material/Button";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
+import { useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
-import AxiosInstance from "./Axios";
+import AxiosInstance from "../Axios";
 import CreateRoom from "./CreateRoom";
 import JoinTheGame from "./JoinTheGame";
-
 import Modal from "@mui/material/Modal";
 
 export const Home = () => {
   const [openCreate, setOpenCreate] = useState(false);
   const [openJoin, setOpenJoin] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  console.log("1");
+  const navigate = useNavigate();
 
   async function GetData() {
     if (localStorage.getItem("imaginariumUserToken") === null) {
       const res = await AxiosInstance.post(`api/users/`);
       localStorage.setItem("imaginariumUserToken", res.data.token);
       console.log(res.data);
-      setLoading(false);
     }
+    const response = await AxiosInstance.get(`api/users/me`);
+    const room = response.data.player?.pawn?.room;
+    if (room) navigate(`/rooms/${room}`);
   }
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export const Home = () => {
       <Card
         variant="outlined"
         sx={{
-          maxWidth: "50%",
+          maxWidth: "60%",
           backgroundColor: "#00000089",
           boxShadow: 10,
           mx: "auto",
@@ -62,8 +62,8 @@ export const Home = () => {
             align="center"
             sx={{ color: "#ffffff", m: 5 }}
           >
-            Очень простая и очень интересная игра, в которой нужно придумывать
-            ассоциации к необычным картинкам
+            A very simple and very interesting game in which you need to come up
+            with associations for unusual pictures
           </Typography>
         </CardContent>
         <CardActions>
@@ -85,7 +85,7 @@ export const Home = () => {
                   }}
                   startIcon={<SportsEsportsIcon fontSize="large" />}
                 >
-                  Создать комнату
+                  Create room
                 </Button>
               </Grid>
 
@@ -103,7 +103,7 @@ export const Home = () => {
                   onClick={() => setOpenJoin(true)}
                   startIcon={<PersonAddIcon fontSize="large" />}
                 >
-                  Присоедениться к игре
+                  Join the game
                 </Button>
               </Grid>
               <Modal

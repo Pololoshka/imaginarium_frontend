@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Typography } from "@mui/material";
+import { Tooltip, Typography } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -21,16 +21,14 @@ export default function NavBar(props) {
   };
 
   return (
-    <div>
+    <React.Fragment>
       <AppBar
         position="fixed"
         sx={{ bgcolor: "#CCC", color: "#000000", zIndex: "tooltip" }}
       >
         <Toolbar disableGutters>
           <Box sx={{ mr: 2, ml: 5 }}>
-            <IconButton size="large" color="inherit" href="/">
-              <AutoAwesomeIcon fontSize="100" />
-            </IconButton>
+            <AutoAwesomeIcon fontSize="medium" />
           </Box>
 
           <Typography
@@ -47,17 +45,19 @@ export default function NavBar(props) {
           </Typography>
 
           <Box sx={{ mr: 2, ml: 5 }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpen}
-              color="inherit"
-              sx={{ mr: 5 }}
-            >
-              <InfoIcon fontSize="100" />
-            </IconButton>
+            <Tooltip title="Rules of the game">
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpen}
+                color="inherit"
+                sx={{ mr: 5 }}
+              >
+                <InfoIcon fontSize="100" />
+              </IconButton>
+            </Tooltip>
             <Backdrop
               sx={{
                 color: "#000000d5",
@@ -81,8 +81,7 @@ export default function NavBar(props) {
           </Box>
         </Toolbar>
       </AppBar>
-
-      <Box>{content}</Box>
-    </div>
+      <React.Fragment>{content}</React.Fragment>
+    </React.Fragment>
   );
 }
