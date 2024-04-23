@@ -3,48 +3,79 @@ import { CardHeader, CardActionArea, CardMedia } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Backdrop from "@mui/material/Backdrop";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
 
 const PlayingField = (props) => {
-  const { stage } = props;
-  const [open1, setOpen1] = useState(false);
-  const [open2, setOpen2] = useState(false);
-  const [open3, setOpen3] = useState(false);
-  const [open4, setOpen4] = useState(false);
+  const { room } = props;
+  const [open, setOpen] = useState(false);
+  const [id, setId] = useState();
+  const [card, setCard] = useState();
+
+  const cardsPlayers = () => {
+    console.log(room);
+    var new_list = [];
+    var count = 0;
+    if (room.pawns) {
+      room.pawns.map((pawn) => {
+        pawn.room_cards.map((room_card) => {
+          if (room_card.is_active) {
+            new_list.push({ card: room_card.card, card_id: room_card.id });
+          }
+        });
+      });
+
+      new_list
+        .sort((a, b) => a.card - b.card)
+        .map((data) => {
+          count += 1;
+          data["id"] = count;
+        });
+    }
+    return new_list;
+  };
+
+  const resultPrevStep = () => {
+    var prevStep = [];
+    var count = 0;
+    console.log(room);
+    if (room.pawns) {
+      room.pawns.map((pawn) => {
+        pawn.room_cards.map((room_card) => {
+          if (room_card.association) {
+            prevStep.push({
+              card: room_card.card,
+              pawn: pawn.player?.name,
+              card_id: room_card.id,
+              votes: [],
+            });
+          }
+        });
+      });
+      prevStep.sort((a, b) => a.card - b.card);
+      prevStep.map((data) => {
+        count += 1;
+        data["id"] = count;
+      });
+      prevStep.map((data) => {
+        room.pawns.map((pawn) => {
+          if (pawn.vote === data.card_id) {
+            data["votes"].push(pawn.player.name);
+          }
+        });
+      });
+    }
+    return prevStep;
+  };
+
+  function submission(data) {
+    setId(data.id);
+    setCard(data.card);
+    setOpen(true);
+  }
   return (
     <React.Fragment>
-      {stage === 1 && (
-        <Grid
-          item
-          xs={9}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        ></Grid>
-      )}
-      {stage === 2 && (
-        <Grid
-          item
-          xs={9}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Card
-            variant="outlined"
-            sx={{
-              width: 350,
-              boxShadow: 10,
-              zIndex: "modal",
-            }}
-          >
-            <CardMedia
-              component="img"
-              image="https://imaginarium-game.ru/local/templates/imaginarium-game/images/imaginarium.jpg"
-            />
-          </Card>
-        </Grid>
-      )}
-      {stage === 3 && (
+      {room.step === 1 && (
         <Grid
           container
           spacing={1}
@@ -52,12 +83,7 @@ const PlayingField = (props) => {
           alignItems="start"
           justifyContent="center"
         >
-          {[
-            { id: 1, isVisible: open1, isVisibleFunc: setOpen1 },
-            { id: 2, isVisible: open2, isVisibleFunc: setOpen2 },
-            { id: 3, isVisible: open3, isVisibleFunc: setOpen3 },
-            { id: 4, isVisible: open4, isVisibleFunc: setOpen4 },
-          ].map((data) => (
+          {resultPrevStep().map((data) => (
             <Grid item>
               <Card
                 variant="outlined"
@@ -67,36 +93,111 @@ const PlayingField = (props) => {
                   zIndex: "modal",
                 }}
               >
-                <CardActionArea onClick={() => data.isVisibleFunc(true)}>
+                <CardActionArea onClick={() => submission(data)}>
+                  <CardContent>
+                    <Typography
+                      variant="h6"
+                      color="text.secondary"
+                      align="center"
+                    >
+                      {data.pawn}
+                    </Typography>
+                  </CardContent>
+                  <CardMedia
+                    component="img"
+                    image={require(`../../../img/cards/${data.card}.jpg`)}
+                  />
+                </CardActionArea>
+                <CardContent>
+                  {data.votes.map((vote) => (
+                    <Typography variant="body2" color="text.secondary">
+                      {vote}
+                    </Typography>
+                  ))}
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+      {room.step === 2 && (
+        <Grid
+          container
+          spacing={1}
+          direction="row"
+          alignItems="start"
+          justifyContent="center"
+        >
+          {cardsPlayers().map((data) => (
+            <Grid item>
+              <Card
+                variant="outlined"
+                sx={{
+                  width: 150,
+                  boxShadow: 10,
+                  zIndex: "modal",
+                }}
+              >
+                <CardActionArea onClick={() => submission(data)}>
+                  <CardMedia
+                    component="img"
+                    image={require(`../../../img/imaginarium1.jpg`)}
+                  />
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+      {room.step === 3 && (
+        <Grid
+          container
+          spacing={1}
+          direction="row"
+          alignItems="start"
+          justifyContent="center"
+        >
+          {cardsPlayers().map((data) => (
+            <Grid item>
+              <Card
+                variant="outlined"
+                sx={{
+                  width: 150,
+                  boxShadow: 10,
+                  zIndex: "modal",
+                }}
+              >
+                <CardActionArea onClick={() => submission(data)}>
                   <CardHeader title={data.id} />
                   <CardMedia
                     component="img"
-                    image="https://imaginarium-game.ru/local/templates/imaginarium-game/images/imaginarium.jpg"
+                    image={require(`../../../img/cards/${data.card}.jpg`)}
                   />
                 </CardActionArea>
-                <Backdrop
-                  sx={{
-                    color: "#fff",
-                    zIndex: (theme) => theme.zIndex.drawer + 1,
-                  }}
-                  open={data.isVisible}
-                  onClick={() => data.isVisibleFunc(false)}
-                >
-                  <Card
-                    variant="outlined"
+                {open && (
+                  <Backdrop
                     sx={{
-                      width: 500,
-                      boxShadow: 10,
-                      zIndex: "modal",
+                      bgcolor: "#00000021",
+                      zIndex: (theme) => theme.zIndex.drawer + 1,
                     }}
+                    open={open}
+                    onClick={() => setOpen(false)}
                   >
-                    <CardHeader title={data.id} />
-                    <CardMedia
-                      component="img"
-                      image="https://imaginarium-game.ru/local/templates/imaginarium-game/images/imaginarium.jpg"
-                    />
-                  </Card>
-                </Backdrop>
+                    <Card
+                      variant="outlined"
+                      sx={{
+                        width: 250,
+                        height: 400,
+                      }}
+                    >
+                      <CardHeader title={id} />
+                      <CardMedia
+                        component="img"
+                        image={require(`../../../img/cards/${card}.jpg`)}
+                      />
+                    </Card>
+                  </Backdrop>
+                )}
               </Card>
             </Grid>
           ))}

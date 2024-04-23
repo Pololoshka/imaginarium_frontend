@@ -7,20 +7,20 @@ import CardContent from "@mui/material/CardContent";
 import PetsIcon from "@mui/icons-material/Pets";
 
 const PlayersStatus = (props) => {
-  const { room, loading } = props;
+  const { room, loading, pawn } = props;
   return (
     <React.Fragment>
       {loading ? (
         <p>Loding data ...</p>
       ) : (
         <Grid container spacing={1} direction="column" alignItems="center">
-          {room.pawns.map((pawn) => (
+          {room.pawns.map((curPawn) => (
             <Grid item>
               <Card
                 variant="outlined"
                 sx={{
                   width: 180,
-                  backgroundColor: pawn.color,
+                  backgroundColor: curPawn.color,
                   boxShadow: 10,
                   zIndex: "modal",
                 }}
@@ -30,20 +30,25 @@ const PlayersStatus = (props) => {
                     sx={{
                       display: "flex",
                       flexDirection: "row",
+                      justifyContent: "space-between",
                     }}
                   >
-                    <PetsIcon sx={{ pr: 2 }} />
-                    <Typography
-                      variant="body1"
-                      align="center"
-                      noWrap
-                      sx={{ pr: 2 }}
-                    >
-                      {pawn.player?.name}
-                    </Typography>
-                    <Typography variant="body1" align="center">
-                      {pawn.score}
-                    </Typography>
+                    {curPawn.is_lead && (
+                      <PetsIcon sx={{ pr: 2, color: "#44ff00" }} />
+                    )}
+                    {!curPawn.is_lead && <PetsIcon sx={{ pr: 2 }} />}
+                    {curPawn === pawn && (
+                      <Typography variant="h6" noWrap sx={{ pr: 1 }}>
+                        {curPawn.player?.name}
+                      </Typography>
+                    )}
+                    {curPawn !== pawn && (
+                      <Typography variant="body1" noWrap sx={{ pr: 1 }}>
+                        {curPawn.player?.name}
+                      </Typography>
+                    )}
+
+                    <Typography variant="h6">{curPawn.score}</Typography>
                   </Box>
                 </CardContent>
               </Card>

@@ -16,13 +16,12 @@ const PlayerCardField = (props) => {
     console.log(pawn);
     if (pawn.room_cards) {
       for (let i = 0; i < pawn.room_cards.length; i++) {
-        if (!pawn.room_cards[i].is_active) {
+        if (!pawn.room_cards[i].is_active && !pawn.room_cards[i].association) {
           count += 1;
           new_list.push({ id: count, card: pawn.room_cards[i].card });
         }
       }
     }
-    console.log(new_list);
     return new_list;
   };
 
@@ -74,7 +73,7 @@ const PlayerCardField = (props) => {
                     <Card
                       variant="outlined"
                       sx={{
-                        width: 500,
+                        width: 250,
                       }}
                     >
                       <CardHeader title={id} />

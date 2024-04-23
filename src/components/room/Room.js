@@ -138,8 +138,8 @@ export const Room = () => {
         <p>Loding data ...</p>
       ) : (
         <Box>
-          <Box sx={{ mb: 5, px: 4, mt: 10 }}>
-            <Typography variant="h2" noWrap align="center">
+          <Box sx={{ px: 4, mt: 10 }}>
+            <Typography variant="h2" noWrap align="left">
               Room {roomCode}
             </Typography>
           </Box>
